@@ -1,0 +1,34 @@
+{
+  "containers": [
+    {
+      "name": "yuboshu",
+      "domain": "",
+      "ip": "",
+      "containerId": "60708892eeb86daa7d48e00cf472802b27583aa39f494c1036075745f7ccfe0f"
+    }
+  ],
+  "config": {
+    "yuboshu": {
+      "remark": "",
+      "dockerfilePath": "Dockerfile",
+      "buildDir": "",
+      "minNum": 0,
+      "maxNum": 50,
+      "cpu": 0.5,
+      "mem": 1,
+      "policyType": "cpu",
+      "policyThreshold": 60,
+      "envParams": {
+        "MYSQL_HOST": "mysql",
+        "MYSQL_PORT": "3306",
+        "MYSQL_USERNAME": "root",
+        "MYSQL_PASSWORD": "root",
+        "REDIS_HOST": "redis",
+        "REDIS_PORT": "6379"
+      },
+      "customLogs": "stdout",
+      "containerPort": 80,
+      "initialDelaySeconds": 2
+    }
+  }
+}
