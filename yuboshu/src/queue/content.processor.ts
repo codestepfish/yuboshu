@@ -35,15 +35,7 @@ export class ContentProcessor {
       return
     }
 
-    // img 链接
-    const imgRes: any = await axios.post('http://api.weixin.qq.com/tcb/batchdownloadfile', {
-      env: 'prod-3gzj8o0we6005e14',
-      file_list: [{ fileid: payload.avatar, max_age: 1800 }],
-    })
-
-    const avatarUrl = imgRes.data?.file_list[0].download_url
-
-    await this.handleCheckImg(payload.openid, avatarUrl, 1, {
+    await this.handleCheckImg(payload.openid, payload.avatar, 1, {
       type: 'userInfo',
       value: payload.id,
     })
@@ -113,10 +105,10 @@ export class ContentProcessor {
       file_list: [{ fileid, max_age: 1800 }],
     })
 
-    const avatarUrl = imgRes.data?.file_list[0].download_url
+    const media_url = imgRes.data?.file_list[0].download_url
 
     const res: any = await axios.post('http://api.weixin.qq.com/wxa/media_check_async', {
-      media_url: avatarUrl,
+      media_url,
       media_type: 2,
       version: 2,
       openid,
