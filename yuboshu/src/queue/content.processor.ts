@@ -2,9 +2,9 @@ import { Process, Processor } from '@nestjs/bull'
 import axios from 'axios'
 import { CACHE_MANAGER, Inject } from '@nestjs/common'
 import { Cache } from 'cache-manager'
-import { AuthService } from '../auth/auth.service'
 import { Job } from 'bull'
 import { UserService } from '../user/user.service'
+import { AuthService } from '../user/auth.service'
 
 // 内容安全检查
 @Processor('yuboshu')

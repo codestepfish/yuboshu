@@ -8,6 +8,9 @@ import { BullModule } from '@nestjs/bull'
 import { ConfigService } from '@nestjs/config'
 import { BullModuleOptions } from '@nestjs/bull/dist/interfaces/bull-module-options.interface'
 import { ContentService } from '../queue/content.service'
+import { ContentProcessor } from '../queue/content.processor'
+import { AuthService } from './auth.service'
+import { AuthController } from './auth.controller'
 
 @Module({
   imports: [
@@ -18,7 +21,7 @@ import { ContentService } from '../queue/content.service'
     }),
     TypeOrmModule.forFeature([User, DongTan]),
   ],
-  providers: [UserService, ContentService],
-  controllers: [UserController],
+  providers: [UserService, AuthService, ContentService, ContentProcessor],
+  controllers: [UserController, AuthController],
 })
 export class UserModule {}

@@ -9,7 +9,6 @@ import { RedisClientOptions } from 'redis'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { UserModule } from './user/user.module'
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions'
-import { AuthModule } from './auth/auth.module'
 import { JobModule } from './tasks/job.module'
 
 @Module({
@@ -32,7 +31,6 @@ import { JobModule } from './tasks/job.module'
       inject: [ConfigService],
     }),
     ScheduleModule.forRoot(),
-    AuthModule,
     UserModule,
     JobModule,
   ],
