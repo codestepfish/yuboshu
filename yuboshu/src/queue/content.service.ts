@@ -9,17 +9,38 @@ export class ContentService {
     private readonly queue: Queue,
   ) {}
 
-  async checkContent(content: any) {
-    console.log(content)
+  async checkUserInfo(content: any) {
+    console.log('---------> 检查用户基本信息: ', content)
     if (!content.avatar || content.avatar === '' || !content.nickname || content.nickname === '') {
       return
     }
 
-    // todo 为啥无效
     await this.queue.add(
-      'contentCheckQueue',
+      'userInfoCheckQueue',
       {
         payload: { ...content },
+      },
+      { removeOnComplete: true, removeOnFail: true },
+    )
+  }
+
+  async checkDongTanContent(param: {
+    openid: string
+    imgs: string
+    address: string
+    delete_time: Date
+    create_time: Date
+    user_id: string
+    location: string
+    id: string
+    content: string
+  }) {
+    console.log('---------> 检查动弹内容: ', param)
+
+    await this.queue.add(
+      'dongTanCheckQueue',
+      {
+        payload: { ...param },
       },
       { removeOnComplete: true, removeOnFail: true },
     )

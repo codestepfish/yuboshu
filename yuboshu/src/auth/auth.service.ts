@@ -12,7 +12,7 @@ import axios from 'axios'
 export class AuthService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private userRepository: Repository<User>,
     private readonly contentService: ContentService,
   ) {}
 
@@ -20,7 +20,7 @@ export class AuthService {
     const openid = req.header('x-wx-openid') || ''
     const unionid = req.header('x-wx-unionid') || ''
 
-    let user: User = await this.usersRepository.findOneBy({ openid, unionid })
+    let user: User = await this.userRepository.findOneBy({ openid, unionid })
 
     if (!user) {
       user = new User()
@@ -41,10 +41,12 @@ export class AuthService {
       return null
     }
 
-    user = await this.usersRepository.save<User>(user)
+    user.status = true
+
+    user = await this.userRepository.save<User>(user)
 
     // 内容安全审查
-    await this.contentService.checkContent({ ...user })
+    await this.contentService.checkUserInfo({ ...user })
 
     const dto = new LoginDto()
     dto.id = user.id
@@ -53,9 +55,5 @@ export class AuthService {
     dto.phone = user.phone.substring(0, 3) + '****' + user.phone.substring(7)
 
     return dto
-  }
-
-  async delUser(id: string) {
-    await this.usersRepository.delete({ id })
   }
 }

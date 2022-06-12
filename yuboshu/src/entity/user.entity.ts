@@ -20,6 +20,9 @@ export class User {
   @Column()
   phone: string
 
+  @Column()
+  status: boolean
+
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   create_time: Date
 

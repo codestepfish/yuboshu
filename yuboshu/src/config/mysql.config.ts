@@ -17,5 +17,7 @@ const connectionFactory: MysqlConnectionOptions = {
   supportBigNumbers: true,
   bigNumberStrings: true,
   dateStrings: true,
+  legacySpatialSupport: false,
+  logging: false,
 }
 export default registerAs('mysql', (): MysqlConnectionOptions => connectionFactory)

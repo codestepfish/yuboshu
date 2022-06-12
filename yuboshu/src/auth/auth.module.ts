@@ -4,7 +4,6 @@ import { User } from '../entity/user.entity'
 import { AuthService } from './auth.service'
 import { AuthController } from './auth.controller'
 import { ContentService } from '../queue/content.service'
-import { ContentProcessor } from '../queue/content.processor'
 import { BullModule } from '@nestjs/bull'
 import { ConfigService } from '@nestjs/config'
 import { BullModuleOptions } from '@nestjs/bull/dist/interfaces/bull-module-options.interface'
@@ -19,7 +18,7 @@ import { BullModuleOptions } from '@nestjs/bull/dist/interfaces/bull-module-opti
     }),
     TypeOrmModule.forFeature([User]),
   ],
-  providers: [AuthService, ContentService, ContentProcessor],
+  providers: [AuthService, ContentService],
   controllers: [AuthController],
 })
 export class AuthModule {}
