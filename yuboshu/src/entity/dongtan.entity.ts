@@ -1,7 +1,8 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, Index, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity({ name: 'dongtan' })
 export class DongTan {
+  @PrimaryColumn()
   @PrimaryGeneratedColumn()
   id: string
 

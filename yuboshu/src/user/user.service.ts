@@ -8,6 +8,9 @@ import { DongtanParam } from './dto/dongtan.param'
 import { AppException } from '../common/exception/app.exception'
 import { DongTan } from '../entity/dongtan.entity'
 import { ContentService } from '../queue/content.service'
+import { DongtanDto } from './dto/dongtan.dto'
+import axios from 'axios'
+import { randomInt } from 'crypto'
 
 @Injectable()
 export class UserService {
@@ -102,5 +105,57 @@ export class UserService {
 
     dongtan.delete_time = new Date()
     await this.dongtanRepository.update(id, dongtan)
+  }
+
+  async getDongtan(req: Request): Promise<DongtanDto> {
+    const dts: Array<DongtanDto> = await this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect(DongTan, 'dongtan', 'user.id = dongtan.user_id')
+      .where('user.status = true')
+      .andWhere('dongtan.delete_time is null')
+      .orderBy('dongtan.create_time', 'DESC')
+      .select(
+        `
+        dongtan.id,
+        user.id as user_id,
+        user.nickname,
+        user.avatar,
+        dongtan.content,
+        dongtan.imgs,
+        dongtan.address
+      `,
+      )
+      .offset(0)
+      .limit(100)
+      .getRawMany<DongtanDto>()
+
+    const item: DongtanDto = dts[randomInt(0, dts.length - 1)]
+
+    if (item) {
+      // avatar图片
+      const avatarRes: any = await axios.post('http://api.weixin.qq.com/tcb/batchdownloadfile', {
+        env: 'prod-3gzj8o0we6005e14',
+        file_list: [{ fileid: item.avatar, max_age: 1800 }],
+      })
+
+      item.avatar = avatarRes.data?.file_list[0].download_url
+
+      // imgs图片
+      if (item.imgs && typeof item.imgs === 'string' && item.imgs.length > 0) {
+        const imsRes: any = await axios.post('http://api.weixin.qq.com/tcb/batchdownloadfile', {
+          env: 'prod-3gzj8o0we6005e14',
+          file_list: item.imgs
+            .split(',')
+            .filter((img) => img && img.length > 0)
+            .map((img) => ({ fileid: img, max_age: 1800 })),
+        })
+
+        item.imgs = imsRes.data?.file_list.map((img) => img.download_url)
+      }
+
+      return { ...item }
+    }
+
+    return null
   }
 }

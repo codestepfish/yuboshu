@@ -1,7 +1,8 @@
-import { All, Body, Controller, Post, Req } from '@nestjs/common'
+import { All, Body, Controller, Get, Post, Req } from '@nestjs/common'
 import { UserService } from './user.service'
 import { Request } from 'express'
 import { DongtanParam } from './dto/dongtan.param'
+import { DongtanDto } from './dto/dongtan.dto'
 
 @Controller('user')
 export class UserController {
@@ -20,5 +21,10 @@ export class UserController {
   @Post('dongtan') // 发布动弹
   async dongtan(@Req() req: Request, @Body() dontanParam: DongtanParam) {
     await this.userService.dongtan(req, dontanParam)
+  }
+
+  @Get('dongtan') // 随机获取1条动弹
+  async getDongtan(@Req() req: Request): Promise<DongtanDto> {
+    return await this.userService.getDongtan(req)
   }
 }
