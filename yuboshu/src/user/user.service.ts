@@ -129,7 +129,7 @@ export class UserService {
       .limit(100)
       .getRawMany<DongtanDto>()
 
-    const item: DongtanDto = dts[randomInt(0, dts.length - 1)]
+    const item: DongtanDto = dts[randomInt(0, dts.length)]
 
     if (item) {
       // avatar图片
